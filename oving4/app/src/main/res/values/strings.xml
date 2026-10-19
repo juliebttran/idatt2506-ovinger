@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">leksjonFriend</string>
+    <string name="friend_name">Name: </string>
+    <string name="friend_birthday">Date of birth: </string>
+    <string name="add">Add friend</string>
+    <string name ="save">Save</string>
+    <string name="call_friend">Call</string>
+    <string name="search_web">Search web</string>
+    <string name="back_to_list">Back to list</string>
+    <string name="edit">Edit</string>
+
+</resources>
