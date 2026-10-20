@@ -12,49 +12,21 @@ const val PORT = 12345
 const val HOST = "10.0.2.2"
 
 class ChatViewModel : ViewModel() {
+    private val server = ChatServer(PORT)
+
+    private val client = ChatClient(HOST, PORT)
+    private var connection: Connection? = null
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages.asStateFlow()
-
     private val _closed = MutableStateFlow<Boolean>(false)
     val closed: StateFlow<Boolean> = _closed.asStateFlow()
-
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
-
     private val _isServer = MutableStateFlow<Boolean?>(null)
     val isServer: StateFlow<Boolean?> = _isServer.asStateFlow()
-
     private val _clientCount = MutableStateFlow(0)
     val clientCount: StateFlow<Int> = _clientCount.asStateFlow()
-
-    private var connection: Connection? = null
-
-    private val server = ChatServer(PORT)
-    private val client = ChatClient(HOST, PORT)
-
-    private fun add(message: Message) {
-        _messages.value += message
-    }
-
-    private suspend fun listen(open: Connection) {
-        try {
-            while (true) {
-                val line = open.receive() ?: break
-                add(Message(fromMe = false, text = line))
-            }
-        }catch (e: IOException) {
-
-        }
-        _closed.value = true
-        _clientCount.value = 0
-    }
-
-    override fun onCleared() {
-        connection?.close()
-        server.close()
-    }
     fun startAsServer() = start(asServer = true)
-
     fun startAsClient() = start(asServer = false)
 
     private fun start(asServer: Boolean) {
@@ -85,5 +57,27 @@ class ChatViewModel : ViewModel() {
 
             }
         }
+    }
+
+    private suspend fun listen(open: Connection) {
+        try {
+            while (true) {
+                val line = open.receive() ?: break
+                add(Message(fromMe = false, text = line))
+            }
+        }catch (e: IOException) {
+
+        }
+        _closed.value = true
+        _clientCount.value = 0
+    }
+
+    private fun add(message: Message) {
+        _messages.value += message
+    }
+
+    override fun onCleared() {
+        connection?.close()
+        server.close()
     }
 }
