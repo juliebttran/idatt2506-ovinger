@@ -16,6 +16,7 @@ fun ChatScreen(
     isServer: Boolean?,
     messages: List<Message>,
     draftMessage: String,
+    clientCount: Int = 0,
     onDraftMessageChanged: (String) -> Unit,
     onStartServer: () -> Unit,
     onStartClient: () -> Unit,
@@ -23,7 +24,9 @@ fun ChatScreen(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = {ChatTopAppBar(isServer = isServer)
+        topBar = {ChatTopAppBar(
+            isServer = isServer,
+            clientCount = clientCount)
         },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->

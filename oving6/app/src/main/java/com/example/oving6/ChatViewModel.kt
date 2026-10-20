@@ -24,6 +24,9 @@ class ChatViewModel : ViewModel() {
     private val _isServer = MutableStateFlow<Boolean?>(null)
     val isServer: StateFlow<Boolean?> = _isServer.asStateFlow()
 
+    private val _clientCount = MutableStateFlow(0)
+    val clientCount: StateFlow<Int> = _clientCount.asStateFlow()
+
     private var connection: Connection? = null
 
     private val server = ChatServer(PORT)
@@ -43,6 +46,7 @@ class ChatViewModel : ViewModel() {
 
         }
         _closed.value = true
+        _clientCount.value = 0
     }
 
     override fun onCleared() {
@@ -62,9 +66,11 @@ class ChatViewModel : ViewModel() {
                 val socket = if (asServer) server.awaitClient() else client.connect()
                 val open = Connection(socket)
                 connection = open
+                _clientCount.value = 1
                 listen(open)
             } catch (e: IOException) {
                 _error.value = e.toString()
+                _clientCount.value = 0
             }
         }
     }

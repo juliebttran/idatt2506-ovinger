@@ -9,4 +9,5 @@
     <string name="from_other">Motpart: </string>
     <string name="draft_placeholder">Skriv melding...</string>
     <string name="send">Send</string>
+    <string name="connected_clients">Tilkoblede: %1$d</string>
 </resources>

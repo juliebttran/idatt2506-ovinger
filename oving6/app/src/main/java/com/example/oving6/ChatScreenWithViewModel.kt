@@ -17,11 +17,13 @@ fun ChatScreenWithViewModel(
     val isServer by viewModel.isServer.collectAsStateWithLifecycle()
     val messages by viewModel.messages.collectAsStateWithLifecycle()
     var draftMessage by rememberSaveable { mutableStateOf("") }
+    val clientCount by viewModel.clientCount.collectAsStateWithLifecycle()
 
     ChatScreen(
         isServer = isServer,
         messages = messages,
         draftMessage = draftMessage,
+        clientCount = clientCount,
         onDraftMessageChanged = { draftMessage = it },
         onStartServer = { viewModel.startAsServer() },
         onStartClient = { viewModel.startAsClient() },
