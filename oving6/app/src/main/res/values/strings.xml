@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">oving6</string>
     <string name="choose_role">Velg din rolle</string>
-    <string name="server_role">Start som Server</string>
-    <string name="client_role">Start som Klient</string>
-    <string name="server_title">Rolle: Server</string>
-    <string name="client_title">Rolle: Klient</string>
+    <string name="server_role">Vær tjener</string>
+    <string name="client_role">Koble til</string>
+    <string name="server_title">Server</string>
+    <string name="client_title">Klient</string>
     <string name="from_me">Meg: </string>
     <string name="from_other">Motpart: </string>
     <string name="draft_placeholder">Skriv melding...</string>

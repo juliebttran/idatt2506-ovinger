@@ -11,11 +11,12 @@ import java.io.IOException
 const val PORT = 12345
 const val HOST = "10.0.2.2"
 
+private const val SYSTEM_COUNT_PREFIX = "__CLIENT_COUNT__:"
+
 class ChatViewModel : ViewModel() {
     private val server = ChatServer(PORT)
-
     private val client = ChatClient(HOST, PORT)
-    private var connection: Connection? = null
+    private val connections = mutableListOf<Connection>()
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages.asStateFlow()
     private val _closed = MutableStateFlow<Boolean>(false)
@@ -28,48 +29,107 @@ class ChatViewModel : ViewModel() {
     val clientCount: StateFlow<Int> = _clientCount.asStateFlow()
     fun startAsServer() = start(asServer = true)
     fun startAsClient() = start(asServer = false)
-
     private fun start(asServer: Boolean) {
         if (_isServer.value != null) return
-
         _isServer.value = asServer
+
+        viewModelScope.launch {
+            if (asServer) {
+                try {
+                    while (true) {
+                        val socket = server.awaitClient()
+                        val connection = Connection(socket)
+                        handleConnection(connection)
+                    }
+                } catch (e: IOException) {
+                }
+            } else {
+                try {
+                    val socket = client.connect()
+                    val connection = Connection(socket)
+                    handleConnection(connection)
+                } catch (e: IOException) {
+                }
+            }
+        }
+    }
+
+    private fun handleConnection(connection: Connection) {
+        synchronized(connections) {
+            connections.add(connection)
+            updateClientCount(connections.size)
+        }
+
         viewModelScope.launch {
             try {
-                val socket = if (asServer) server.awaitClient() else client.connect()
-                val open = Connection(socket)
-                connection = open
-                _clientCount.value = 1
-                listen(open)
+                while (true) {
+                    val line = connection.receive() ?: break
+
+                    if (line.startsWith(SYSTEM_COUNT_PREFIX)) {
+                        val count = line.substringAfter(SYSTEM_COUNT_PREFIX).toIntOrNull()
+                        if (count != null) {
+                            _clientCount.value = count
+                        }
+                    } else {
+                        add(Message(fromMe = false, text = line))
+
+                        if (_isServer.value == true) {
+                            sendToOthers(line, sender = connection)
+                        }
+                    }
+                }
             } catch (e: IOException) {
-                _error.value = e.toString()
-                _clientCount.value = 0
+            } finally {
+                synchronized(connections) {
+                    connections.remove(connection)
+                    updateClientCount(connections.size)
+                }
+                connection.close()
+            }
+        }
+    }
+
+    private fun updateClientCount(count: Int) {
+        _clientCount.value = count
+        if (_isServer.value == true) {
+            broadcastSystemMessage("$SYSTEM_COUNT_PREFIX$count")
+        }
+    }
+
+    private fun broadcastSystemMessage(sysMsg: String) {
+        viewModelScope.launch {
+            val currentConnections = synchronized(connections) { connections.toList() }
+            for (conn in currentConnections) {
+                try {
+                    conn.send(sysMsg)
+                } catch (e: IOException) {
+                }
+            }
+        }
+    }
+
+    private suspend fun sendToOthers(line: String, sender: Connection) {
+        val currentConnections = synchronized(connections) { connections.toList() }
+        for (conn in currentConnections) {
+            if (conn === sender) continue
+            try {
+                conn.send(line)
+            } catch (e: IOException) {
             }
         }
     }
 
     fun send(text: String) {
-        val open = connection ?: return
         viewModelScope.launch {
-            try {
-                open.send(text)
-                add(Message(fromMe = true, text = text))
-            } catch (e: IOException) {
-
+            val currentConnections = synchronized(connections) { connections.toList() }
+            for (conn in currentConnections) {
+                try {
+                    conn.send(text)
+                } catch (e: IOException) {
+                }
             }
+            add(Message(fromMe = true, text = text))
         }
-    }
-
-    private suspend fun listen(open: Connection) {
-        try {
-            while (true) {
-                val line = open.receive() ?: break
-                add(Message(fromMe = false, text = line))
-            }
-        }catch (e: IOException) {
-
-        }
-        _closed.value = true
-        _clientCount.value = 0
     }
 
     private fun add(message: Message) {
@@ -77,7 +137,11 @@ class ChatViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        connection?.close()
         server.close()
+        client.close()
+        val currentConnections = synchronized(connections) { connections.toList() }
+        for (conn in currentConnections) {
+            conn.close()
+        }
     }
 }
