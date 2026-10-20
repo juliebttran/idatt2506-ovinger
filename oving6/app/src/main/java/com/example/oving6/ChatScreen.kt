@@ -100,25 +100,22 @@ fun ChatScreen(
                             }
                         }
                     }
-
-                    if (isServer == false) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            OutlinedTextField(
-                                value = draftMessage,
-                                onValueChange = onDraftMessageChanged,
-                                singleLine = true,
-                                modifier = Modifier.weight(1f),
-                                placeholder = { Text(text = stringResource(R.string.draft_placeholder)) }
-                            )
-                            Button(onClick = { onSendMessage(draftMessage) }) {
-                                Text(text = stringResource(R.string.send))
-                            }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        OutlinedTextField(
+                            value = draftMessage,
+                            onValueChange = onDraftMessageChanged,
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            placeholder = { Text(text = stringResource(R.string.draft_placeholder)) }
+                        )
+                        Button(onClick = { onSendMessage(draftMessage) }) {
+                            Text(text = stringResource(R.string.send))
                         }
                     }
                 }
