@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -21,7 +22,11 @@ fun ChatScreen(
     onSendMessage: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        topBar = {ChatTopAppBar(isServer = isServer)
+        },
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,13 +51,6 @@ fun ChatScreen(
                     }
                 }
             } else {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = if (isServer) stringResource(R.string.server_title) else stringResource(R.string.client_title),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
@@ -89,4 +87,20 @@ fun ChatScreen(
             }
         }
     }
+
+@Preview(showBackground = true)
+@Composable
+fun ChatScreenPreview() {
+    ChatScreen(
+        isServer = false,
+        messages = listOf(
+            Message(fromMe = true, text = "Hei!"),
+            Message(fromMe = false, text = "Hallo! Hvordan går det?")
+        ),
+        draftMessage = "Bra!",
+        onDraftMessageChanged = {},
+        onStartServer = {},
+        onStartClient = {},
+        onSendMessage = {}
+    )
 }
