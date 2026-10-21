@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">oving7</string>
+    <string name="choose_color">Bakgrunnsfarge</string>
+    <string name="chosen">Valgt: %1$s</string>
+    <string name="all_authors">Alle filmer</string>
+    <string name="movies_with_keanu_reeves">Filmer med Keanu Reeves</string>
+    <string name="movies_by_christopher_nolan">Filmer regisert av Christopher Nolan</string>
+    <string name="settings">Innstillinger</string>
+    <string name="color_none">Ingen</string>
+    <string name="color_blue">Blå</string>
+    <string name="color_green">Grønn</string>
+    <string name="color_red">Rød</string>
 </resources>
