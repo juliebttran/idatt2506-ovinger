@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumberGameTopBar(
+fun TopAppBar(
     onFindAllMovies: () -> Unit,
     onFindMovieByDirector: () -> Unit,
     onFindActorsInMovie: () -> Unit,

@@ -26,9 +26,6 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val _color = MutableStateFlow(SettingsStore.DEFAULT_COLOR)
     val color: StateFlow<String> = _color.asStateFlow()
 
-    private val _filePath = MutableStateFlow("")
-    val filePath: StateFlow<String> = _filePath.asStateFlow()
-
     init {
         viewModelScope.launch {
             _color.value = settings.backgroundColor()

@@ -3,7 +3,6 @@ package com.example.oving7
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-
 @Entity(
     tableName = "movie",
     indices = [Index(value = ["title"], unique = true)]

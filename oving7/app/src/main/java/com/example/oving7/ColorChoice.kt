@@ -1,7 +1,5 @@
 package com.example.oving7
 
-import com.example.oving7.R
-
 data class ColorChoice(val value: String, val label: Int)
 val COLOR_CHOICES: List<ColorChoice> = listOf(
     ColorChoice("ingen", R.string.color_none),
