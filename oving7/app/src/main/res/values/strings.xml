@@ -3,6 +3,7 @@
     <string name="choose_color">Bakgrunnsfarge</string>
     <string name="chosen">Valgt: %1$s</string>
     <string name="all_movies">Alle filmer</string>
+    <string name="more_options">Flere alternativer</string>
     <string name="actors_in_the_matrix">Skuespillere i The Martrix</string>
     <string name="movies_by_christopher_nolan">Filmer regisert av Christopher Nolan</string>
     <string name="settings">Innstillinger</string>

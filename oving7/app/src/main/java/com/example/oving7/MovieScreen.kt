@@ -45,6 +45,7 @@ fun MovieScreen(
             TopAppBar(
                 title = { Text(text = stringResource(R.string.app_name)) },
                 actions = {
+                    OverflowMenu(onFindAllMovies = onFindAllMovies, onFindMovieByDirector = onFindMovieByDirector, onFindActorsInMovie = onFindActorsInMovie)
                     IconButton(onClick = onOpenSettings) {
                         Icon(
                             painter = painterResource(R.drawable.settings),
@@ -62,7 +63,6 @@ fun MovieScreen(
                 .background(colorFor(color))
                 .padding(16.dp)
         ) {
-            MovieActions(onFindAllMovies = onFindAllMovies, onFindMovieByDirector = onFindMovieByDirector, onFindActorsInMovie = onFindActorsInMovie)
             LazyColumn { items(result) { row -> Text(text = row) } }
         }
     }

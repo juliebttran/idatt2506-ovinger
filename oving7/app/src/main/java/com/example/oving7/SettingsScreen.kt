@@ -27,7 +27,8 @@ fun SettingsScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { TopAppBar(title = { Text(text = stringResource(R.string.settings)) }) }
+        topBar = { TopAppBar(
+            title = { Text(text = stringResource(R.string.settings)) }) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
             Text(text = stringResource(R.string.choose_color))
