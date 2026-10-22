@@ -14,7 +14,7 @@ private const val LOCAL_FILE = "movies_local.txt"
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val settings = SettingsStore(application)
     private val dao = Room.databaseBuilder(
-        application, MovieDatabase::class.java, "library.db"
+        application, MovieDatabase::class.java, "movie.db"
     ).build().movieDao()
     private val files = MovieFiles(application)
     private val _path = MutableStateFlow("")
