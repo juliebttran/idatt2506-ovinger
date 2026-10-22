@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
 
 @Composable
 
-fun MovieScren(
+fun MovieScreen(
     result: List<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -36,8 +36,8 @@ fun MovieScren(
 
 @Preview(showBackground = true)
 @Composable
-fun movieScreenPreview(){
-    MovieScren(
+fun MovieScreenPreview(){
+    MovieScreen(
         result = listOf("Ian McShane", "Lance Reddick")
     )
 }

@@ -13,7 +13,7 @@ fun MovieScreenWithViewModel(
 ) {
     val result by viewModel.result.collectAsStateWithLifecycle()
 
-    MovieScren(
+    MovieScreen(
         result = result,
         modifier = modifier
     )
