@@ -11,4 +11,5 @@
     <string name="color_blue">Blå</string>
     <string name="color_green">Grønn</string>
     <string name="color_red">Rød</string>
+    <string name="local_file_path">Lagret filbane: %1$s</string>
 </resources>

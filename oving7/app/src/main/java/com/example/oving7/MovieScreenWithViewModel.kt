@@ -17,6 +17,7 @@ fun MovieScreenWithViewModel(
     val navController = rememberNavController()
     val result by viewModel.result.collectAsStateWithLifecycle()
     val color by viewModel.color.collectAsStateWithLifecycle()
+    val path by viewModel.path.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
@@ -27,6 +28,7 @@ fun MovieScreenWithViewModel(
             MovieScreen(
                 result = result,
                 color = color,
+                path = path,
                 onFindAllMovies = viewModel::findAllMovies,
                 onFindMovieByDirector = {viewModel.findMovieByDirector("Christopher Nolan")},
                 onFindActorsInMovie = {viewModel.findActorsInMovie("The Matrix")},

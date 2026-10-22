@@ -9,12 +9,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+private const val LOCAL_FILE = "movies_local.txt"
+
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val settings = SettingsStore(application)
     private val dao = Room.databaseBuilder(
         application, MovieDatabase::class.java, "library.db"
     ).build().movieDao()
     private val files = MovieFiles(application)
+    private val _path = MutableStateFlow("")
+    val path: StateFlow<String> = _path.asStateFlow()
 
     private val _result = MutableStateFlow<List<String>>(emptyList())
     val result: StateFlow<List<String>> = _result.asStateFlow()
@@ -22,11 +26,19 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val _color = MutableStateFlow(SettingsStore.DEFAULT_COLOR)
     val color: StateFlow<String> = _color.asStateFlow()
 
+    private val _filePath = MutableStateFlow("")
+    val filePath: StateFlow<String> = _filePath.asStateFlow()
+
     init {
         viewModelScope.launch {
             _color.value = settings.backgroundColor()
             try {
                 val lines = files.readPacked(R.raw.movies)
+
+                files.writeLocal(LOCAL_FILE, lines)
+                _result.value = files.readLocal(LOCAL_FILE)
+                _path.value = files.localPath(LOCAL_FILE)
+
                 for (line in lines) {
                     if (line.isNotBlank()) {
                         val parts = line.split(";")

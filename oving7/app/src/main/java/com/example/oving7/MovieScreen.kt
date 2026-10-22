@@ -2,7 +2,9 @@ package com.example.oving7
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,6 +35,7 @@ fun colorFor(name: String): Color = when (name) {
 fun MovieScreen(
     result: List<String>,
     color: String,
+    path: String,
     onFindAllMovies: () -> Unit,
     onFindMovieByDirector: () -> Unit,
     onFindActorsInMovie: () -> Unit,
@@ -63,7 +66,10 @@ fun MovieScreen(
                 .background(colorFor(color))
                 .padding(16.dp)
         ) {
-            LazyColumn { items(result) { row -> Text(text = row) } }
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) { items(result) { row -> Text(text = row) }  }
+            Text(text = stringResource(R.string.local_file_path, path))
         }
     }
 }
@@ -75,6 +81,7 @@ fun MovieScreenPreview(){
         MovieScreen(
             result = listOf("Ian McShane", "Lance Reddick"),
             color = "gronn",
+            path = "/data/…/books_local.txt",
             onFindAllMovies = {},
             onFindMovieByDirector = {},
             onFindActorsInMovie = {},
