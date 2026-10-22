@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey
 )
 
 data class MovieActor(
-    @PrimaryKey(autoGenerate = true)
     val movieId: Long,
     val personId: Long,
 )
