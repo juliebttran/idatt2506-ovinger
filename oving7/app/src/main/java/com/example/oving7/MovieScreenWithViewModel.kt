@@ -1,13 +1,20 @@
 package com.example.oving7
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.lang.reflect.Modifier
 
 @Composable
 fun MovieScreenWithViewModel(
     modifier: Modifier = Modifier,
     viewModel: MovieViewModel = viewModel()
 ) {
+    val result by viewModel.result.collectAsStateWithLifecycle()
 
+    MovieScren(
+        result = result,
+        modifier = modifier
+    )
 }
