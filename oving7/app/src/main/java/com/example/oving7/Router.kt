@@ -1,4 +1,9 @@
 package com.example.oving7
 
-class Router {
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Movies
+
+@Serializable
+object Settings
