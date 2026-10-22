@@ -21,17 +21,29 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val _result = MutableStateFlow<List<String>>(emptyList())
     val result: StateFlow<List<String>> = _result.asStateFlow()
 
+
     init {
         viewModelScope.launch {
-            val lines = files.readPacked(R.raw.movies)
-            for (line in lines) {
-                val (movie, director, actor) = line.split(";")
-                var actorId = dao.insertPerson(Person(name = actor))
-                if (actorId == -1L) actorId = dao.peronId(actor)
+            try {
+                val lines = files.readPacked(R.raw.movies)
+                for (line in lines) {
+                    if (line.isNotBlank()) {
+                        val parts = line.split(";")
+                        if (parts.size >= 2) {
+                            val movie = parts[0].trim()
+                            val director = parts[1].trim()
+
+                            dao.insertPerson(Person(name = director))
+                            val directorId = dao.personId(director)
+                            dao.insertMovie(Movie(title = movie, directorId = directorId))
+                        }
+                    }
+                }
+                _result.value = dao.findAllMovies()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _result.value = listOf("Error: ${e.localizedMessage}")
             }
-            _result.value = dao.allPeople()
         }
     }
-
-
 }
