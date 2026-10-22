@@ -29,15 +29,15 @@ fun OverflowMenu(
         DropdownMenu(expanded, onDismissRequest = {expanded=false}) {
             DropdownMenuItem(
                 text = {Text(stringResource(R.string.all_movies))},
-                onClick = {expanded = false; onFindAllMovies},
+                onClick = {expanded = false; onFindAllMovies()},
             )
             DropdownMenuItem(
                 text = {Text(stringResource(R.string.movies_by_christopher_nolan))},
-                onClick = {expanded = false; onFindMovieByDirector},
+                onClick = {expanded = false; onFindMovieByDirector()},
             )
             DropdownMenuItem(
                 text = {Text(stringResource(R.string.actors_in_the_matrix))},
-                onClick = {expanded = false; onFindActorsInMovie},
+                onClick = {expanded = false; onFindActorsInMovie()},
             )
         }
     }
